@@ -197,6 +197,17 @@ function selectAnswer(option) {
   const answers = [...userAnswers.value];
   answers[currentQuestionIndex.value] = option;
   userAnswers.value = answers;
+  if (!answerSubmitted.value) {
+    clearInterval(timerInterval.value);
+    answerSubmitted.value = true;
+    isCorrect.value = userAnswers.value[currentQuestionIndex.value] === currentQuestion.value.correctAnswer;
+    if (isCorrect.value) {
+      showConfetti.value = true;
+      setTimeout(() => {
+        showConfetti.value = false;
+      }, 2000);
+    }
+  }
 }
 
 function checkAnswer() {
@@ -362,7 +373,8 @@ function getRadioClass(option) {
 }
 
 function startTimer() {
-  resetTimer();
+  clearInterval(timerInterval.value);
+  questionTimer.value = 30;
   timerInterval.value = setInterval(() => {
     if (questionTimer.value > 0) {
       questionTimer.value--;
@@ -378,7 +390,6 @@ function startTimer() {
 function resetTimer() {
   clearInterval(timerInterval.value);
   questionTimer.value = 30;
-  startTimer();
 }
 
 function formatTime(seconds) {
