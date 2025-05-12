@@ -197,17 +197,6 @@ function selectAnswer(option) {
   const answers = [...userAnswers.value];
   answers[currentQuestionIndex.value] = option;
   userAnswers.value = answers;
-  if (!answerSubmitted.value) {
-    clearInterval(timerInterval.value);
-    answerSubmitted.value = true;
-    isCorrect.value = userAnswers.value[currentQuestionIndex.value] === currentQuestion.value.correctAnswer;
-    if (isCorrect.value) {
-      showConfetti.value = true;
-      setTimeout(() => {
-        showConfetti.value = false;
-      }, 2000);
-    }
-  }
 }
 
 function checkAnswer() {
@@ -229,11 +218,11 @@ function skipQuestion() {
   const answers = [...userAnswers.value];
   answers[currentQuestionIndex.value] = null;
   userAnswers.value = answers;
-  
   if (currentQuestionIndex.value < questions.length - 1) {
     currentQuestionIndex.value++;
     answerSubmitted.value = false;
     resetTimer();
+    startTimer();
   } else {
     finishWorksheet();
   }
@@ -244,6 +233,7 @@ function nextQuestion() {
     currentQuestionIndex.value++;
     answerSubmitted.value = false;
     resetTimer();
+    startTimer();
   } else {
     finishWorksheet();
   }
@@ -253,6 +243,8 @@ function previousQuestion() {
   if (currentQuestionIndex.value > 0) {
     currentQuestionIndex.value--;
     answerSubmitted.value = true; // Keep the answer submitted state when going back
+    resetTimer();
+    startTimer();
   }
 }
 
